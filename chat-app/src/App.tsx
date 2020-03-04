@@ -14,7 +14,7 @@ function App() {
   const [hubConnection, setHubConnection] = useState<signalR.HubConnection>();
   const [counter , setCounter] = useState(0);
 
-  const messageRef = useRef<HTMLInputElement>(null);
+  const [message, setMessage] = useState('');
   const userRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -50,10 +50,12 @@ function App() {
           }
         </ul>
         <input type="text" ref={userRef} placeholder="User" />
-        <input type="text" ref={messageRef} placeholder="Message" />
+        <input type="text" value={message} placeholder="Message" onChange={(e)=>{
+          setMessage(e.target.value);
+        }} />
         <button onClick={()=>{
-            console.log(messageRef);
-            hubConnection?.invoke("SendMessage", `${userRef.current?.value}`, `${messageRef.current?.value}`)
+            hubConnection?.invoke("SendMessage", `${userRef.current?.value}`, `${message}`)
+            setMessage('');
         }} >Send</button>
       </header>
     </div>
